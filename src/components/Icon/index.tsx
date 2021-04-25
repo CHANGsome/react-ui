@@ -1,5 +1,7 @@
 import './importAll';
 import React from "react";
+import './icon.scss'
+import classNames from "../../utils/classnames";
 
 /**
  *
@@ -10,17 +12,15 @@ import React from "react";
  * 4. 使用svg标签展示图标：#wechat
  */
 
-interface  IconType{
-    name: string;
+interface IconType extends React.SVGAttributes<SVGElement> {
+  name: string;
 }
-const Icon: React.FC<IconType> = (props) => {
-    const {name} = props;
+
+const Icon: React.FC<IconType> = ({name, className, children, ...restProps}) => {
   return (
-    <div>
-      <svg>
-        <use xlinkHref={`#${name}`}/>
-      </svg>
-    </div>
+    <svg className={classNames('react-ui-icon', className)} {...restProps}>
+      <use xlinkHref={`#${name}`}/>
+    </svg>
   );
 };
 export default Icon;
