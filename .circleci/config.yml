@@ -15,14 +15,14 @@ jobs:
       - save_cache:
         paths:
           - node_modules
-        key:  - v2-dependencies-{{ checksum "package.json" }}
+        key: v2-dependencies-{{ checksum "package.json" }}
       - persist_to_workspace:
         root: .
         paths:
           - node_modules
   build:
     <<: *defaults
-    steps: 
+    steps:
       - checkout
       - attach_workspace:
         at: .
@@ -40,7 +40,7 @@ jobs:
       - run: yarn ci
       - store_test_results:
         path: test-results
-  
+
 workflows:
   version: 2
   build_accept_deploy:
@@ -48,7 +48,7 @@ workflows:
       - prepare
       - build:
         requires:
-         - test
+          - test
       - test:
         requires:
           - prepare
