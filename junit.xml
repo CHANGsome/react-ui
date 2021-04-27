@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="7" failures="0" errors="0" time="1.687">
+  <testsuite name="Icon" errors="0" failures="0" skipped="0" timestamp="2021-04-27T16:27:26" time="0.647" tests="2">
+    <testcase classname="Icon render Icon successfully" name="Icon render Icon successfully" time="0.008">
+    </testcase>
+    <testcase classname="Icon onClick" name="Icon onClick" time="0.039">
+    </testcase>
+  </testsuite>
+  <testsuite name="classnames" errors="0" failures="0" skipped="0" timestamp="2021-04-27T16:27:26" time="0.064" tests="5">
+    <testcase classname="classnames 接受1个参数" name="classnames 接受1个参数" time="0.001">
+    </testcase>
+    <testcase classname="classnames 接受2个参数" name="classnames 接受2个参数" time="0">
+    </testcase>
+    <testcase classname="classnames 接受其中一个参数是undefined" name="classnames 接受其中一个参数是undefined" time="0">
+    </testcase>
+    <testcase classname="classnames 接受0个参数" name="classnames 接受0个参数" time="0.001">
+    </testcase>
+    <testcase classname="classnames 接受一些奇怪的参数" name="classnames 接受一些奇怪的参数" time="0.001">
+    </testcase>
+  </testsuite>
+</testsuites>
