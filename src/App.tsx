@@ -1,11 +1,12 @@
 import React from 'react';
-import Icon from './components/Icon';
+// import DialogExample from './components/Dialog/dialog.example';
+// import ButtonExample from './components/Button/button.example';
+import LayoutExample from './components/Layout/layout.example';
 
 function App() {
   return (
     <div>
-      <Icon name='bilibili' className="hhh" onClick={()=>{console.log('onclick')}}/>
-      <Icon name='wechat'/>
+      <LayoutExample />
     </div>
   );
 }

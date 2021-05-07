@@ -1,0 +1,21 @@
+.react-ui-layout {
+  display: flex;
+  flex-direction: column;
+
+  & & {
+    flex-grow: 1;
+    flex-direction: row;
+  }
+
+  &-content {
+    flex-grow: 1;
+  }
+
+  &-hasAside {
+  flex-direction: row;
+    .react-ui-layout{
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}
