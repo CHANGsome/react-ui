@@ -4,7 +4,7 @@ import Button from './index';
 const ButtonExample: React.FC = () => {
   return (
     <div>
-      <div style={{ borderBottom: '1px solid #ccc', padding: '20px' }}>
+      <div style={{ marginBottom: '20px' }}>
         <h1>Example 1</h1>
         <Button style={{ marginRight: '16px' }}>button</Button>
         <Button type="primary" style={{ marginRight: '16px' }}>
@@ -12,7 +12,7 @@ const ButtonExample: React.FC = () => {
         </Button>
         <Button type="link">button</Button>
       </div>
-      <div style={{ borderBottom: '1px solid #ccc', padding: '20px' }}>
+      <div style={{ marginBottom: '20px' }}>
         <h1>Example 2</h1>
         <Button danger style={{ marginRight: '16px' }}>
           button

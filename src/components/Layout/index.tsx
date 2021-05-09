@@ -2,6 +2,9 @@ import * as React from 'react';
 import { ReactElement } from 'react';
 import scopedClassMaker from '../../utils/scopedClassMaker';
 import Aside from './aside';
+import Header from './header';
+import Content from './content';
+import Footer from './footer';
 import classNames from '../../utils/classnames';
 
 interface Props extends React.HTMLAttributes<HTMLElement> {
@@ -30,3 +33,4 @@ const Layout: React.FC<Props> = (props) => {
   );
 };
 export default Layout;
+export { Header, Aside, Footer, Content };

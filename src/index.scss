@@ -1,0 +1,81 @@
+@import "style/vars";
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+*::after {
+  box-sizing: border-box;
+}
+
+*::before {
+  box-sizing: border-box;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: normal;
+}
+
+a {
+  text-decoration: none;
+}
+
+ul, li {
+  list-style: none;
+}
+body{
+  font-size: 16px;
+}
+pre{
+  font-family: 'Fira Code Medium', Consolas, monospace;
+}
+.container{
+  min-height: 100vh;
+}
+.header {
+  padding: 20px 20px 0 20px;
+  border-bottom: 1px solid #eee;
+  .logo {
+    width: 200px;
+  }
+}
+.main{
+  padding: 20px 0;
+  .aside{
+    width: 200px;
+    border-right: 1px solid #eee;
+    .title{
+      margin-bottom: 12px;
+      font-size: 24px;
+      padding: 0 40px;
+    }
+    ul>li{
+      font-size: 18px;
+      line-height: 32px;
+      a{
+        display: block;
+        color: #333;
+        padding-left: 40px;
+        &:hover{
+          color: $purple;
+        }
+        &.active{
+          background-color: $purple;
+          color: #eee
+        }
+      }
+    }
+  }
+  .content{
+    padding: 0 16px;
+    flex: 1;
+  }
+}
+.footer {
+  text-align: center;
+  line-height: 64px;
+  font-size: 16px;
+  color: #666;
+  border-top: 1px solid #eee;
+}
