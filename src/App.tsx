@@ -1,18 +1,18 @@
 import React from 'react';
 import './index.scss';
 import {
-  DialogExample,
-  ButtonExample,
-  LayoutExample,
-} from './components/index.example';
-import {
   BrowserRouter as Router,
   Switch,
   Route,
   NavLink,
 } from 'react-router-dom';
 import Layout, { Aside, Content, Footer, Header } from './components/Layout';
-import IconDemo from './components/Icon/icon.demo';
+import {
+  IconDemo,
+  ButtonDemo,
+  DialogDemo,
+  LayoutDemo,
+} from './components/index.demo';
 
 const logo = require('assets/logo.png');
 console.log(logo);
@@ -48,13 +48,13 @@ function App() {
                 <IconDemo />
               </Route>
               <Route path="/button">
-                <ButtonExample />
+                <ButtonDemo />
               </Route>
               <Route path="/dialog">
-                <DialogExample />
+                <DialogDemo />
               </Route>
               <Route path="/layout">
-                <LayoutExample />
+                <LayoutDemo />
               </Route>
               <Route path="/">
                 <IconDemo />
