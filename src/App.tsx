@@ -12,10 +12,10 @@ import {
   ButtonDemo,
   DialogDemo,
   LayoutDemo,
+  FormDemo,
 } from './components/index.demo';
 
 const logo = require('assets/logo.png');
-console.log(logo);
 
 function App() {
   return (
@@ -40,6 +40,9 @@ function App() {
               <li>
                 <NavLink to="/layout">Layout</NavLink>
               </li>
+              <li>
+                <NavLink to="/form">Form</NavLink>
+              </li>
             </ul>
           </Aside>
           <Content className="content">
@@ -55,6 +58,9 @@ function App() {
               </Route>
               <Route path="/layout">
                 <LayoutDemo />
+              </Route>
+              <Route path="/form">
+                <FormDemo />
               </Route>
               <Route path="/">
                 <IconDemo />

@@ -1,0 +1,14 @@
+.react-ui-form{
+  &-td{ // table布局的tr不能设置间距，只能在td中设置padding实现间距
+    padding: 12px 0;
+  }
+  &-tr:first-child &-td{
+    padding-top: 0;
+  }
+  &-tr:last-child &-td{
+    padding-bottom: 0;
+  }
+  &-td + &-td{  // 这个表示td右边的兄弟节点也是td
+    padding-left: 16px;
+  }
+}
