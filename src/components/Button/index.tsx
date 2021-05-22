@@ -4,7 +4,7 @@ import scopedClassMaker from '../../utils/scopedClassMaker';
 import classNames from '../../utils/classnames';
 
 interface Props extends React.HTMLAttributes<HTMLElement> {
-  type?: string;
+  type?: 'primary' | 'normal' | 'link';
   danger?: boolean;
 }
 
@@ -15,7 +15,7 @@ const Button: React.FC<Props> = (props) => {
     <button
       className={classNames(
         sc(),
-        type ? sc(type) : undefined,
+        sc(type),
         danger ? sc(type ? type + '-danger' : 'danger') : undefined
       )}
       {...rest}
@@ -23,5 +23,9 @@ const Button: React.FC<Props> = (props) => {
       {children}
     </button>
   );
+};
+Button.defaultProps = {
+  type: 'normal',
+  danger: false,
 };
 export default Button;

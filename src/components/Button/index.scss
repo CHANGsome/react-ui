@@ -5,31 +5,74 @@
   font-weight: 400;
   outline: none;
   border: 1px solid $grey;
-  color: rgba(0,0,0,.85);
+  color: rgba(0, 0, 0, .85);
   background-color: #fff;
   cursor: pointer;
   display: inline-block;
   padding: 4px 16px;
-  &:active{
+  border-radius: 4px;
+
+  &-normal {
+    &:hover {
+      border-color: $blue;
+      color: $blue;
+    }
+    &-danger {
+      border-color: $red;
+      color: $red;
+
+      &:hover {
+        border-color: $red;
+        color: $red;
+        opacity: 0.8;
+      }
+    }
+  }
+
+  &:active {
     opacity: 0.8;
   }
-  &-danger{
-    border-color: $red;
-    color: $red;
-  }
+
+
+
   &-primary {
     background-color: $blue;
     border-color: $blue;
     color: #fff;
-    &-danger{
+
+    &:hover {
+      background-color: lighten($blue,10%);
+      border-color: lighten($blue, 10%);
+    }
+
+    &-danger {
       border-color: $red;
       background-color: $red;
+
+      &:hover {
+
+        opacity: 0.8;
+      }
     }
   }
-  &-link{
+
+  &-link {
     border: none;
-    &-danger{
+
+    &:hover {
+      color: $blue;
+      background-color: #efefef;
+      opacity: 0.8;
+    }
+
+    &-danger {
       color: $red;
+
+      &:hover {
+        color: $red;
+        background-color: #efefef;
+        opacity: 0.8;
+      }
     }
   }
 }

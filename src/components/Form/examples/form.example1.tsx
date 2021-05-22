@@ -1,13 +1,28 @@
 import * as React from 'react';
-import Form, { FieldsType, FormDataType, FormErrorType } from '../index';
+import Form, { FieldsType, FormDataType } from '../index';
 import Button from '../../Button';
 import { useState } from 'react';
-import Validator, { FormRules } from '../validator';
+import Validator, { FormRules, FormErrorTYpe } from '../validator';
 
 interface Props extends React.HTMLAttributes<HTMLElement> {}
+
+const usernames = ['bob', 'jack', 'alice', 'Lucy'];
+const checkUserName = (
+  username: string,
+  succeed: () => void,
+  fail: () => void
+) => {
+  setTimeout(() => {
+    if (usernames.indexOf(username) >= 0) {
+      succeed();
+    } else {
+      fail();
+    }
+  }, 1000);
+};
 const FormExample1: React.FC<Props> = (props) => {
   const [formData, setFormValue] = useState<FormDataType>({
-    username: 'zhangsan',
+    username: 'aaa',
     password: '123456',
   });
   const [fields] = useState<Array<FieldsType>>([
@@ -22,23 +37,35 @@ const FormExample1: React.FC<Props> = (props) => {
       input: { type: 'password' },
     },
   ]);
-  const [errors, setErrors] = useState<FormErrorType>({});
+  const [errors, setErrors] = useState<FormErrorTYpe>({});
   const onSubmit = () => {
     const rules: FormRules = [
       {
         key: 'username',
         required: true,
-        minLens: 3,
+        minLens: 4,
         maxLens: 6,
         pattern: /^[a-zA-Z]+$/,
+      },
+      {
+        key: 'username',
+        validator: {
+          name: 'unique',
+          validate(username: string) {
+            return new Promise((resolve, reject) => {
+              checkUserName(username, resolve, reject);
+            });
+          },
+        },
       },
       {
         key: 'password',
         required: true,
       },
     ];
-    const errors = Validator(formData, rules);
-    setErrors(errors);
+    Validator(formData, rules, (errors) => {
+      setErrors(errors);
+    });
   };
   return (
     <div style={{ marginBottom: '20px' }}>
@@ -47,7 +74,9 @@ const FormExample1: React.FC<Props> = (props) => {
         fields={fields}
         buttons={
           <>
-            <Button>提交</Button>
+            <Button type="primary" style={{ marginRight: '12px' }}>
+              提交
+            </Button>
             <Button>取消</Button>
           </>
         }
@@ -56,6 +85,7 @@ const FormExample1: React.FC<Props> = (props) => {
           setFormValue(newValue);
         }}
         errors={errors}
+        errorDisplayMode={'all'}
       />
     </div>
   );
