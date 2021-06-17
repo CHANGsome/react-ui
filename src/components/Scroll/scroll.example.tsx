@@ -6,7 +6,12 @@ const ScrollExample: React.FC<Props> = (_props) => {
   return (
     <div>
       <h1>Scroll Example 1</h1>
-      <Scroll style={{ height: '400px', border: '1px solid green' }}>
+      <Scroll
+        style={{ height: '400px', border: '1px solid green' }}
+        handlePull={() => {
+          console.log('外界知道scroll下拉更新了');
+        }}
+      >
         <p>1</p>
         <p>2</p>
         <p>3</p>

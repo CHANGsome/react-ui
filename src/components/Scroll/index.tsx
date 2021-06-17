@@ -10,7 +10,9 @@ import {
   useState,
 } from 'react';
 
-interface Props extends React.HTMLAttributes<HTMLElement> {}
+interface Props extends React.HTMLAttributes<HTMLElement> {
+  handlePull?: () => void;
+}
 const sc = scopedClassMaker('react-ui-scroll');
 const Scroll: React.FC<Props> = (props) => {
   const { children, ...rest } = props;
@@ -109,7 +111,11 @@ const Scroll: React.FC<Props> = (props) => {
     lastTouchYRef.current = e.touches[0].clientY;
   };
   const handleTouchEnd: TouchEventHandler = () => {
-    setInnerTranslateY(0);
+    if (pulling.current) {
+      setInnerTranslateY(0);
+      props.handlePull && props.handlePull();
+      pulling.current = false;
+    }
   };
 
   useEffect(() => {
