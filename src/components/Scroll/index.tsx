@@ -3,6 +3,7 @@ import scopedClassMaker from '../../utils/scopedClassMaker';
 import './index.scss';
 import {
   MouseEventHandler,
+  TouchEventHandler,
   UIEventHandler,
   useEffect,
   useRef,
@@ -15,10 +16,17 @@ const Scroll: React.FC<Props> = (props) => {
   const { children, ...rest } = props;
   const [barHeight, setBarHeight] = useState(0);
   const [barTop, _setBarTop] = useState(0);
+  const [barVisible, setBarVisible] = useState(false);
+  const [innerTranslateY, _setInnerTranslateY] = useState(0);
+
   const containerRef = useRef<HTMLDivElement>(null);
   const draggingRef = useRef(false);
   const firstYRef = useRef(0);
   const firstBarTopRef = useRef(0);
+  const timeoutRef = useRef<number | null>(null);
+  const lastTouchYRef = useRef(0);
+  const moveCount = useRef(0);
+  const pulling = useRef(false);
 
   useEffect(() => {
     // mounted的时候计算滚动条高度
@@ -34,11 +42,26 @@ const Scroll: React.FC<Props> = (props) => {
     if (barTop > maxBarTop) return;
     _setBarTop(barTop);
   };
+  const setInnerTranslateY = (y: number) => {
+    if (y < 0) {
+      y = 0;
+    } else if (y > 150) {
+      y = 150;
+    }
+    _setInnerTranslateY(y);
+  };
   const onScroll: UIEventHandler = (e) => {
+    setBarVisible(true);
     const scrollHeight = e.currentTarget.scrollHeight;
     const viewHeight = e.currentTarget.getBoundingClientRect().height;
     const scrollTop = e.currentTarget.scrollTop;
     setBarTop((scrollTop * viewHeight) / scrollHeight);
+    if (timeoutRef.current !== null) {
+      window.clearTimeout(timeoutRef.current);
+    }
+    timeoutRef.current = window.setTimeout(() => {
+      setBarVisible(false);
+    }, 300);
   };
   const handleBarMouseDown: MouseEventHandler = (e) => {
     draggingRef.current = true;
@@ -63,6 +86,31 @@ const Scroll: React.FC<Props> = (props) => {
       e.preventDefault();
     }
   };
+  const handleTouchStart: TouchEventHandler = (e) => {
+    if (containerRef.current!.scrollTop !== 0) {
+      return;
+    }
+    lastTouchYRef.current = e.touches[0].clientY;
+    pulling.current = true;
+    moveCount.current = 0;
+  };
+  const handleTouchMove: TouchEventHandler = (e) => {
+    // deltaY>0 下拉；deltaY<0 上拉
+    const deltaY = e.touches[0].clientY - lastTouchYRef.current;
+    moveCount.current += 1;
+    if (moveCount.current === 1 && deltaY < 0) {
+      pulling.current = false;
+      return;
+    }
+    if (!pulling.current) {
+      return;
+    }
+    setInnerTranslateY(innerTranslateY + deltaY);
+    lastTouchYRef.current = e.touches[0].clientY;
+  };
+  const handleTouchEnd: TouchEventHandler = () => {
+    setInnerTranslateY(0);
+  };
 
   useEffect(() => {
     document.addEventListener('mousemove', handleBarMouseMove);
@@ -76,14 +124,31 @@ const Scroll: React.FC<Props> = (props) => {
   });
   return (
     <div {...rest} className={sc()}>
-      <div className={sc('inner')} onScroll={onScroll} ref={containerRef}>
+      <div
+        className={sc('inner')}
+        style={{ transform: `translateY(${innerTranslateY}px)` }}
+        ref={containerRef}
+        onScroll={onScroll}
+        onTouchStart={handleTouchStart} // 手机上的事件
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
         {children}
       </div>
-      <div className={sc('track')} onMouseDown={handleBarMouseDown}>
-        <div
-          className={sc('bar')}
-          style={{ height: barHeight, transform: `translateY(${barTop}px)` }}
-        />
+      {barVisible && (
+        <div className={sc('track')} onMouseDown={handleBarMouseDown}>
+          <div
+            className={sc('bar')}
+            style={{ height: barHeight, transform: `translateY(${barTop}px)` }}
+          />
+        </div>
+      )}
+      <div className={sc('pulling')} style={{ height: `${innerTranslateY}px` }}>
+        {innerTranslateY === 150 ? (
+          <span className={sc('pulling-text')}>松开手指更新</span>
+        ) : (
+          <span className={sc('pulling-arrow')}>⇣</span>
+        )}
       </div>
     </div>
   );
