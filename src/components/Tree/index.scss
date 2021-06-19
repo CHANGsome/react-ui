@@ -1,0 +1,40 @@
+.react-ui-tree {
+  &-text {
+    outline: 1px solid;
+    line-height: 1.5;
+
+    &:hover {
+      background-color: #1890ff;
+    }
+  }
+
+  &-level-1 {
+    .react-ui-tree-text {
+      padding-left: 10px;
+    }
+  }
+
+  &-level-2 {
+    .react-ui-tree-text {
+      padding-left: 20px;
+    }
+  }
+
+  &-level-3 {
+    .react-ui-tree-text {
+      padding-left: 30px;
+    }
+  }
+
+  &-level-4 {
+    .react-ui-tree-text {
+      padding-left: 40px;
+    }
+  }
+
+  &-level-5 {
+    .react-ui-tree-text {
+      padding-left: 50px;
+    }
+  }
+}

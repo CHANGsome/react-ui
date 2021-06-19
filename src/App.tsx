@@ -15,6 +15,7 @@ import {
   FormDemo,
 } from './components/index.demo';
 import ScrollExample from './components/Scroll/scroll.example';
+import TreeExample from './components/Tree/tree.example';
 
 const logo = require('assets/logo.png');
 
@@ -47,6 +48,9 @@ function App() {
               <li>
                 <NavLink to="/scroll">Scroll</NavLink>
               </li>
+              <li>
+                <NavLink to="/tree">Tree</NavLink>
+              </li>
             </ul>
           </Aside>
           <Content className="content">
@@ -68,6 +72,9 @@ function App() {
               </Route>
               <Route path="/scroll">
                 <ScrollExample />
+              </Route>
+              <Route path="/tree">
+                <TreeExample />
               </Route>
               <Route path="/">
                 <IconDemo />
