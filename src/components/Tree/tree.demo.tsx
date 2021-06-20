@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Demo from '../Demo';
-import TreeExample from './tree.example';
+import TreeExample1 from './examples/tree.example1';
+import TreeExample2 from './examples/tree.example2';
 
 interface Props extends React.HTMLAttributes<HTMLElement> {}
 const TreeDemo: React.FC<Props> = (props) => {
@@ -9,10 +10,18 @@ const TreeDemo: React.FC<Props> = (props) => {
       <Demo
         code={
           // eslint-disable-next-line import/no-webpack-loader-syntax
-          require(`!!raw-loader!./tree.example`).default
+          require(`!!raw-loader!./examples/tree.example1`).default
         }
       >
-        <TreeExample />
+        <TreeExample1 />
+      </Demo>
+      <Demo
+        code={
+          // eslint-disable-next-line import/no-webpack-loader-syntax
+          require(`!!raw-loader!./examples/tree.example2`).default
+        }
+      >
+        <TreeExample2 />
       </Demo>
     </div>
   );

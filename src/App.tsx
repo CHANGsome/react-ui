@@ -15,7 +15,7 @@ import {
   FormDemo,
 } from './components/index.demo';
 import ScrollExample from './components/Scroll/scroll.example';
-import TreeExample from './components/Tree/tree.example';
+import TreeDemo from './components/Tree/tree.demo';
 
 const logo = require('assets/logo.png');
 
@@ -74,7 +74,7 @@ function App() {
                 <ScrollExample />
               </Route>
               <Route path="/tree">
-                <TreeExample />
+                <TreeDemo />
               </Route>
               <Route path="/">
                 <IconDemo />

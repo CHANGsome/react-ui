@@ -1,9 +1,9 @@
 import * as React from 'react';
-import Tree, { TreeDataItem } from './index';
+import Tree, { TreeDataItem } from '../index';
 import { useState } from 'react';
 
 interface Props extends React.HTMLAttributes<HTMLElement> {}
-const TreeExample: React.FC<Props> = (props) => {
+const TreeExample1: React.FC<Props> = (props) => {
   const [treeData] = useState<Array<TreeDataItem>>([
     {
       text: '1',
@@ -37,24 +37,18 @@ const TreeExample: React.FC<Props> = (props) => {
     },
   ]);
   const [selectedValues, setSelectedValues] = useState(['1.1', '1.1.2']);
-  const handleChangeChecked = (item: TreeDataItem, checked: boolean) => {
-    if (checked) {
-      setSelectedValues([...selectedValues, item.value]);
-    } else {
-      setSelectedValues(selectedValues.filter((value) => value !== item.value));
-    }
-  };
 
   return (
     <div>
-      <h1>Tree Example 1</h1>
+      <h1>Tree Example1：多选</h1>
       <Tree
         dataSource={treeData}
         style={{ width: '200px' }}
-        selectedValues={selectedValues}
-        onChangeChecked={handleChangeChecked}
+        selected={selectedValues}
+        multiple={true}
+        onChangeSelected={(newSelected) => setSelectedValues(newSelected)}
       />
     </div>
   );
 };
-export default TreeExample;
+export default TreeExample1;
