@@ -1,8 +1,9 @@
 import * as React from 'react';
-import { ChangeEventHandler, useState } from 'react';
+import { ChangeEventHandler, useCallback, useState } from 'react';
 import Icon from '../../Icon';
 import { TreeDataItem, TreeProps } from '../index';
 import scopedClassMaker from '../../../utils/scopedClassMaker';
+import useUpdate from '../../../hooks/useUpdate';
 
 type TreeItemProps = {
   item: TreeDataItem;
@@ -15,6 +16,12 @@ const TreeItem: React.FC<TreeItemProps> = (props) => {
   const { item, level, treeProps, ...rest } = props;
   const { selected, multiple, onChangeSelected } = treeProps;
   const [folded, setFolded] = useState(false);
+  useUpdate(
+    folded,
+    useCallback(() => {
+      console.log('folded changed', folded);
+    }, [folded])
+  );
   const classes = {
     [`level-${level}`]: true,
     item: true,

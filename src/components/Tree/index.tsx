@@ -30,7 +30,6 @@ const Tree: React.FC<TreeProps> = (props) => {
     onChangeSelected,
     ...rest
   } = props;
-
   return (
     <div {...rest}>
       {dataSource?.map((item) => (
