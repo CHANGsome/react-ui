@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ChangeEventHandler, useCallback, useState } from 'react';
+import { ChangeEventHandler, useCallback, useRef, useState } from 'react';
 import Icon from '../../Icon';
 import { TreeDataItem, TreeProps } from '../index';
 import scopedClassMaker from '../../../utils/scopedClassMaker';
@@ -13,13 +13,36 @@ type TreeItemProps = {
 const sc = scopedClassMaker('react-ui-tree');
 
 const TreeItem: React.FC<TreeItemProps> = (props) => {
+  const [folded, setFolded] = useState(false);
+  const treeChildrenRef = useRef<HTMLDivElement>(null);
+
   const { item, level, treeProps, ...rest } = props;
   const { selected, multiple, onChangeSelected } = treeProps;
-  const [folded, setFolded] = useState(false);
   useUpdate(
     folded,
     useCallback(() => {
-      console.log('folded changed', folded);
+      if (!treeChildrenRef.current) {
+        return;
+      }
+      // 增加展开折叠的过渡效果
+      if (!folded) {
+        // 打开，设置高度
+        console.log('打开');
+        treeChildrenRef.current.style.height = 'auto';
+        const { height } = treeChildrenRef.current.getBoundingClientRect();
+        treeChildrenRef.current.style.height = '0';
+        treeChildrenRef.current.getBoundingClientRect();
+        treeChildrenRef.current.style.height = height + 'px';
+      } else {
+        // 关闭，高度变为0
+        console.log('关闭');
+        const { height } = treeChildrenRef.current.getBoundingClientRect();
+        // 一开始的高度属性值为auto，直接变为0不会有过渡效果，需要先设置高度为一个定值
+        treeChildrenRef.current.style.height = height + 'px';
+        // 这句话不写两个设置高度的语句会被合并执行
+        treeChildrenRef.current.getBoundingClientRect();
+        treeChildrenRef.current.style.height = '0';
+      }
     }, [folded])
   );
   const classes = {
@@ -71,7 +94,7 @@ const TreeItem: React.FC<TreeItemProps> = (props) => {
             />
           ))}
       </div>
-      <div className={sc({ fold: folded })}>
+      <div className={sc('fold')} ref={treeChildrenRef}>
         {item.children?.map((subItem) => (
           <TreeItem
             key={subItem.value}
