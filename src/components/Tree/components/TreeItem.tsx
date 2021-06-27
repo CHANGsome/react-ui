@@ -48,7 +48,7 @@ const TreeItem: React.FC<TreeItemProps> = (props) => {
   const treeChildrenRef = useRef<HTMLDivElement>(null);
 
   const { item, level, treeProps, ...rest } = props;
-  const { selected, multiple, onChangeSelected } = treeProps;
+  const { selected, multiple, onChangeSelected, autoSelected } = treeProps;
 
   useUpdate(
     folded,
@@ -87,20 +87,31 @@ const TreeItem: React.FC<TreeItemProps> = (props) => {
   const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const childrenValues = collectChildrenValues(item);
     if (e.target.checked) {
-      multiple
-        ? // @ts-ignore
-          onChangeSelected([...selected, item.value, ...childrenValues])
-        : // @ts-ignore
-          onChangeSelected(item.value);
+      if (multiple) {
+        // 多选
+        if (autoSelected) {
+          // 支持子元素自动选中
+          // @ts-ignore
+          onChangeSelected([...selected, item.value, ...childrenValues]);
+        } else {
+          // 不支持子元素自动选中
+          // @ts-ignore
+          onChangeSelected([...selected, item.value]);
+        }
+      } else {
+        // 单选
+        // @ts-ignore
+        onChangeSelected(item.value);
+      }
     } else {
       multiple
         ? // @ts-ignore
           onChangeSelected(
             // @ts-ignore
             selected.filter((value) => {
-              return (
-                value !== item.value && childrenValues.indexOf(value) === -1
-              );
+              return autoSelected
+                ? value !== item.value && childrenValues.indexOf(value) === -1
+                : value !== item.value;
             })
           )
         : // @ts-ignore

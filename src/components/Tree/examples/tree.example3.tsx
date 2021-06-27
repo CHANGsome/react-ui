@@ -46,6 +46,7 @@ const TreeExample3: React.FC<Props> = () => {
         style={{ width: '200px' }}
         selected={selectedValues}
         multiple={true}
+        autoSelected={true}
         onChangeSelected={(newSelected) => setSelectedValues(newSelected)}
       />
     </div>
