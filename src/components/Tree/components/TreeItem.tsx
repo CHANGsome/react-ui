@@ -12,12 +12,44 @@ type TreeItemProps = {
 };
 const sc = scopedClassMaker('react-ui-tree');
 
+const collectChildrenValues = (item: TreeDataItem): any => {
+  return flatten(
+    item.children?.map((itemChild) => [
+      itemChild.value,
+      collectChildrenValues(itemChild),
+    ])
+  );
+};
+interface RecursiveArray<T> extends Array<T | RecursiveArray<T>> {}
+const flatten = (arr?: RecursiveArray<string>): Array<string> => {
+  if (!arr) {
+    return [];
+  }
+  // 普通循环写法
+  // const result = [];
+  // for (let i = 0; i < arr.length; i++) {
+  //   if (arr[i] instanceof Array) {
+  //     result.push(...flatten(arr[i] as Array<string>));
+  //   } else {
+  //     result.push(arr[i] as string);
+  //   }
+  // }
+  // return result;
+
+  // reduce写法
+  return arr.reduce<Array<string>>((result, current) => {
+    return result.concat(
+      typeof current === 'string' ? current : flatten(current)
+    );
+  }, []);
+};
 const TreeItem: React.FC<TreeItemProps> = (props) => {
   const [folded, setFolded] = useState(false);
   const treeChildrenRef = useRef<HTMLDivElement>(null);
 
   const { item, level, treeProps, ...rest } = props;
   const { selected, multiple, onChangeSelected } = treeProps;
+
   useUpdate(
     folded,
     useCallback(() => {
@@ -53,16 +85,24 @@ const TreeItem: React.FC<TreeItemProps> = (props) => {
     ? selected.indexOf(item.value) >= 0
     : selected === item.value;
   const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    const childrenValues = collectChildrenValues(item);
     if (e.target.checked) {
       multiple
         ? // @ts-ignore
-          onChangeSelected([...selected, item.value])
+          onChangeSelected([...selected, item.value, ...childrenValues])
         : // @ts-ignore
           onChangeSelected(item.value);
     } else {
       multiple
         ? // @ts-ignore
-          onChangeSelected(selected.filter((value) => value !== item.value))
+          onChangeSelected(
+            // @ts-ignore
+            selected.filter((value) => {
+              return (
+                value !== item.value && childrenValues.indexOf(value) === -1
+              );
+            })
+          )
         : // @ts-ignore
           onChangeSelected('');
     }

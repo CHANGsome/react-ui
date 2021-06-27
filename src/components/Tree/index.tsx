@@ -9,6 +9,7 @@ export interface TreeDataItem {
 }
 interface PartialProps extends React.HTMLAttributes<HTMLElement> {
   dataSource: Array<TreeDataItem>;
+  autoSelected?: boolean; // 为true时勾选当前item也默认勾选了它的所有children
 }
 type MultipleSelected = {
   selected: Array<string>;
