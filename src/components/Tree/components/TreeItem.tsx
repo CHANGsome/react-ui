@@ -5,13 +5,12 @@ import { TreeDataItem, TreeProps } from '../index';
 import scopedClassMaker from '../../../utils/scopedClassMaker';
 import useUpdate from '../../../hooks/useUpdate';
 
-type TreeItemProps = {
+interface TreeItemProps {
   item: TreeDataItem;
   level: number;
   treeProps: TreeProps;
-};
-const sc = scopedClassMaker('react-ui-tree');
-
+  onItemChange: (values: Array<string>) => void;
+}
 const collectChildrenValues = (item: TreeDataItem): any => {
   return flatten(
     item.children?.map((itemChild) => [
@@ -43,11 +42,24 @@ const flatten = (arr?: RecursiveArray<string>): Array<string> => {
     );
   }, []);
 };
+function arrayIntersect<T>(arr: Array<T>, targetArr: Array<T>): Array<T> {
+  // arr1中有几个子元素存在于arr2中
+  const result: Array<T> = [];
+  for (let i = 0; i < arr.length; i++) {
+    if (targetArr.indexOf(arr[i]) >= 0) {
+      result.push(arr[i]);
+    }
+  }
+  return result;
+}
+const sc = scopedClassMaker('react-ui-tree');
+
 const TreeItem: React.FC<TreeItemProps> = (props) => {
   const [folded, setFolded] = useState(false);
   const treeChildrenRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const { item, level, treeProps, ...rest } = props;
+  const { item, level, treeProps, onItemChange, ...rest } = props;
   const { selected, multiple, onChangeSelected, autoSelected } = treeProps;
 
   useUpdate(
@@ -92,11 +104,11 @@ const TreeItem: React.FC<TreeItemProps> = (props) => {
         if (autoSelected) {
           // 支持子元素自动选中
           // @ts-ignore
-          onChangeSelected([...selected, item.value, ...childrenValues]);
+          onItemChange([...selected, item.value, ...childrenValues]);
         } else {
           // 不支持子元素自动选中
           // @ts-ignore
-          onChangeSelected([...selected, item.value]);
+          onItemChange([...selected, item.value]);
         }
       } else {
         // 单选
@@ -106,9 +118,9 @@ const TreeItem: React.FC<TreeItemProps> = (props) => {
     } else {
       multiple
         ? // @ts-ignore
-          onChangeSelected(
+          onItemChange(
             // @ts-ignore
-            selected.filter((value) => {
+            selected!.filter((value) => {
               return autoSelected
                 ? value !== item.value && childrenValues.indexOf(value) === -1
                 : value !== item.value;
@@ -124,11 +136,30 @@ const TreeItem: React.FC<TreeItemProps> = (props) => {
   const foldChildren = () => {
     setFolded(true);
   };
-
+  const handleItemChange = (values: Array<string>) => {
+    const childrenValues = collectChildrenValues(item);
+    const intersectValues = arrayIntersect<string>(values, childrenValues);
+    if (intersectValues.length !== 0) {
+      props.onItemChange(Array.from(new Set(values.concat(item.value))));
+      // 全选：intersectValues.length === childrenValues.length
+      // 部分选中：intersectValues.length !== childrenValues.length
+      inputRef.current!.indeterminate =
+        intersectValues.length !== childrenValues.length;
+    } else {
+      // 子元素全不选
+      inputRef.current!.indeterminate = false;
+      props.onItemChange(values.filter((v) => v !== item.value));
+    }
+  };
   return (
     <div key={item.value} className={sc(classes)} {...rest}>
       <div className={sc('text')}>
-        <input type="checkbox" checked={checked} onChange={handleChange} />
+        <input
+          ref={inputRef}
+          type="checkbox"
+          checked={checked}
+          onChange={handleChange}
+        />
         {item.text}
         {item.children &&
           (folded ? (
@@ -152,6 +183,7 @@ const TreeItem: React.FC<TreeItemProps> = (props) => {
             item={subItem}
             level={level + 1}
             treeProps={treeProps}
+            onItemChange={handleItemChange}
           />
         ))}
       </div>

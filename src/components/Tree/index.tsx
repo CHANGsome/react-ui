@@ -31,10 +31,24 @@ const Tree: React.FC<TreeProps> = (props) => {
     onChangeSelected,
     ...rest
   } = props;
+
+  const handleItemChange = (values: Array<string>) => {
+    console.log(values, '--final values');
+    if (props.multiple) {
+      props.onChangeSelected(values);
+    }
+  };
+
   return (
     <div {...rest}>
       {dataSource?.map((item) => (
-        <TreeItem key={item.value} item={item} level={0} treeProps={props} />
+        <TreeItem
+          key={item.value}
+          item={item}
+          level={0}
+          treeProps={props}
+          onItemChange={handleItemChange}
+        />
       ))}
     </div>
   );
